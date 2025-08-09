@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958380258581",
+    "project_id": "authtutorial-aceac",
+    "storage_bucket": "authtutorial-aceac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958380258581:android:e9a887df55ebca5b03a51c",
+        "android_client_info": {
+          "package_name": "com.example.authentication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqOJQNAtjB1jV2X43nZYsbrNuxQGsU2_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
