@@ -4,20 +4,113 @@ import 'package:authentication/components/square_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   //text editing controller
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
-  //sing user in method
-  //await firebase_auth
+  //sign user in method
   void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
+    //show a loading screen
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
+    //try sign in
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      //pop the loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      //pop the loading circle
+      Navigator.pop(context);
+
+      //WRONG EMAIL
+      if (e.code == 'invalid-email') {
+        //SHOW ERROR TO USER
+        await Future.delayed(Duration(milliseconds: 100));
+        wrongEmailMessage();
+      }
+      //WRONG PASSWORD
+      else if (e.code == 'invalid-credential') {
+        //show error to user
+        await Future.delayed(Duration(milliseconds: 100));
+        wrongPAsswordMessages();
+      } else {
+        // Generic error message for other cases
+        showErrorMessage(
+          'Login failed. Please check your credentials and try again.',
+        );
+      }
+    }
+  }
+
+  //wrong email message popup
+  void wrongEmailMessage() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Incorrect Email'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //wrong password message popup
+  void wrongPAsswordMessages() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Incorrect password'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //generic error message popup
+  void showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -25,12 +118,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
+      resizeToAvoidBottomInset: true,
       //safeArea make the UI avoid the notch area of the device
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             //this make it easier when working with different scree sizes
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 50),
               //logo
