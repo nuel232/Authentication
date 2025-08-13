@@ -1,6 +1,7 @@
 import 'package:authentication/components/my_button.dart';
 import 'package:authentication/components/my_textfield.dart';
 import 'package:authentication/components/square_tile.dart';
+import 'package:authentication/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -35,9 +36,11 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
       //pop the loading circle
+      if (!mounted) return;
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       //pop the loading circle
+      if (!mounted) return;
       Navigator.pop(context);
 
       //WRONG EMAIL
@@ -176,11 +179,17 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //google button
-                  SquareTile(imagePath: 'lib/images/Google-logo.png'),
+                  SquareTile(
+                    imagePath: 'lib/images/Google-logo.png',
+                    onTap: () => AuthService().signWithGoogle(),
+                  ),
 
                   SizedBox(width: 25),
                   //apple button
-                  SquareTile(imagePath: 'lib/images/apple-logo.png'),
+                  SquareTile(
+                    imagePath: 'lib/images/apple-logo.png',
+                    onTap: () {},
+                  ),
                 ],
               ),
 
